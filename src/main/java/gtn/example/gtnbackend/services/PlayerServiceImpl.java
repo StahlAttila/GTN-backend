@@ -1,9 +1,12 @@
 package gtn.example.gtnbackend.services;
 
 import gtn.example.gtnbackend.domains.Player;
+import gtn.example.gtnbackend.domains.dtos.SignInRequestDTO;
+import gtn.example.gtnbackend.domains.dtos.SignInResponseDTO;
 import gtn.example.gtnbackend.domains.dtos.SignUpRequestDTO;
 import gtn.example.gtnbackend.domains.dtos.SignUpResponseDTO;
 import gtn.example.gtnbackend.repositories.PlayerRepository;
+import gtn.example.gtnbackend.security.util.JwtUtil;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,16 +31,29 @@ public class PlayerServiceImpl implements PlayerService {
   }
 
   @Override
-  public SignUpResponseDTO signUpPlayer(SignUpRequestDTO signUpDTO) {
-    checkUserSignUp(signUpDTO);
-    Player player = new Player(signUpDTO.getUsername(), signUpDTO.getEmail(),
-        passwordEncoder().encode(signUpDTO.getPassword()));
+  public SignUpResponseDTO signUpPlayer(SignUpRequestDTO signUpRequestDTO) {
+    checkUserSignUp(signUpRequestDTO);
+    Player player = new Player(signUpRequestDTO.getUsername(), signUpRequestDTO.getEmail(),
+        passwordEncoder().encode(signUpRequestDTO.getPassword()));
     playerRepository.save(player);
     return new SignUpResponseDTO(player.getId(), player.getName(), player.getEmail());
   }
 
-  private void checkUserSignUp(SignUpRequestDTO signUpDTO) {
+  @Override
+  public SignInResponseDTO signInPlayer(SignInRequestDTO signInRequestDTO) {
+    Player player = checkUserSignIn(signInRequestDTO);
+
+    return new SignInResponseDTO(player.getName(), null);
+  }
+
+  private void checkUserSignUp(SignUpRequestDTO signUpRequestDTO) {
     //TODO: implement register check with custom exceptions
+  }
+
+  private Player checkUserSignIn(SignInRequestDTO signInRequestDTO) {
+    //TODO: implement login check with custom exceptions
+
+    return findByName(signInRequestDTO.getUsername());
   }
 
   private PasswordEncoder passwordEncoder() {

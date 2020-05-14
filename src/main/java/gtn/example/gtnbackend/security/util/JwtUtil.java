@@ -44,7 +44,7 @@ public class JwtUtil {
   private String createToken(Map<String, Object> claims, String subject, Integer minute) {
     return Jwts.builder().setClaims(claims).setSubject(subject)
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 600 * minute))
+        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * minute))
         .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
   }
 
