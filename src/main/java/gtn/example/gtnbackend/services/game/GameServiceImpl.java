@@ -1,11 +1,14 @@
 package gtn.example.gtnbackend.services.game;
 
 import gtn.example.gtnbackend.domains.Game;
+import gtn.example.gtnbackend.domains.GameDifficulty;
 import gtn.example.gtnbackend.domains.GameFactory;
+import gtn.example.gtnbackend.domains.GameType;
 import gtn.example.gtnbackend.domains.Player;
 import gtn.example.gtnbackend.domains.dtos.GuessDTO;
 import gtn.example.gtnbackend.domains.dtos.NewGameRequestDTO;
 import gtn.example.gtnbackend.repositories.GameRepository;
+import gtn.example.gtnbackend.services.player.PlayerService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +20,12 @@ public class GameServiceImpl implements GameService {
   private GameFactory gameFactory;
 
   private GameRepository gameRepository;
+  private PlayerService playerService;
 
   @Autowired
-  public GameServiceImpl(GameRepository gameRepository) {
+  public GameServiceImpl(GameRepository gameRepository, PlayerService playerService) {
     this.gameRepository = gameRepository;
+    this.playerService = playerService;
     this.gameFactory = new GameFactory();
   }
 
@@ -29,6 +34,8 @@ public class GameServiceImpl implements GameService {
     Game newGame = gameFactory.createGame(dto.getDifficulty(), dto.getGameType());
     newGame.setPlayer(player);
     gameRepository.save(newGame);
+    player.getGameList().add(newGame);
+    playerService.updatePlayer(player);
 
     return newGame;
   }
@@ -48,11 +55,12 @@ public class GameServiceImpl implements GameService {
       game.setGameStatus("WON");
       //TODO: probably we should set the players rank score here
       gameRepository.save(game);
+      updateRankedScore(game);
 
       return game;
     } else {
       if (game.getLives() - 1 > 0) {
-        if(guessDTO.getGuess() > game.getNumberToGuess()) {
+        if (guessDTO.getGuess() > game.getNumberToGuess()) {
           game.setGuessDirection("The number is lower than " + guessDTO.getGuess());
         } else {
           game.setGuessDirection("The number is higher than " + guessDTO.getGuess());
@@ -66,10 +74,45 @@ public class GameServiceImpl implements GameService {
         game.setFinishedAt(System.currentTimeMillis());
         game.setGameStatus("LOST");
         gameRepository.save(game);
+        updateRankedScore(game);
 
         return game;
       }
     }
+  }
+
+  private void updateRankedScore(Game game) {
+    if (game.getGameType().equals(GameType.RANKED)) {
+      Player player = game.getPlayer();
+      if (game.getDifficulty().equals(GameDifficulty.EASY)) {
+        player.setRankedEasy((player.getRankedEasy() + calculateGameScore(game)) / 2);
+        playerService.updatePlayer(player);
+      } else if (game.getDifficulty().equals(GameDifficulty.MEDIUM)) {
+        player.setRankedMedium((player.getRankedMedium() + calculateGameScore(game)) / 2);
+        playerService.updatePlayer(player);
+      } else {
+        player.setRankedHard((player.getRankedHard() + calculateGameScore(game)) / 2);
+        playerService.updatePlayer(player);
+      }
+    }
+  }
+
+  private Integer calculateGameScore(Game game) {
+    if(game.getLives() == 0) {
+      Player player = game.getPlayer();
+      switch (game.getDifficulty()) {
+        case EASY:
+          return player.getRankedEasy() - (player.getRankedEasy() / 10);
+        case MEDIUM:
+          return player.getRankedMedium() - (player.getRankedMedium() / 10);
+        case HARD:
+          return player.getRankedHard() - (player.getRankedHard() / 10);
+      }
+    }
+    Integer score = game.getLives() * 1000;
+    Integer timeValue = Math.toIntExact((game.getFinishedAt() - game.getStartedAt()) / 1000);
+
+    return score / timeValue;
   }
 
   private Game findById(Long id) {

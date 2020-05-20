@@ -45,6 +45,11 @@ public class PlayerServiceImpl implements PlayerService {
     return new SignInResponseDTO(player.getName(), null);
   }
 
+  @Override
+  public void updatePlayer(Player player) {
+    playerRepository.save(player);
+  }
+
   private void checkUserSignUp(SignUpRequestDTO signUpRequestDTO) {
     //TODO: implement register check with custom exceptions
   }

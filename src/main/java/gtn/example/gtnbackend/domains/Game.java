@@ -1,5 +1,6 @@
 package gtn.example.gtnbackend.domains;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ public class Game {
   private String guessDirection;
 
   @ManyToOne
+  @JsonBackReference
   private Player player;
 
   public Game() {

@@ -15,4 +15,6 @@ public interface PlayerService {
   SignUpResponseDTO signUpPlayer(SignUpRequestDTO signUpDTO);
 
   SignInResponseDTO signInPlayer(SignInRequestDTO signInRequestDTO);
+
+  void updatePlayer(Player player);
 }
