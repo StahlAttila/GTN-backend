@@ -1,7 +1,7 @@
 package gtn.example.gtnbackend.security.filters;
 
 import gtn.example.gtnbackend.security.util.JwtUtil;
-import gtn.example.gtnbackend.services.PlayerDetailService;
+import gtn.example.gtnbackend.services.player.PlayerDetailService;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
-    final String authorizationHeader = request.getHeader("X-tribes-token");
+    final String authorizationHeader = request.getHeader("token");
     String username = null;
     String jwt = null;
 

@@ -1,8 +1,10 @@
 package gtn.example.gtnbackend.domains;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Player {
@@ -14,6 +16,9 @@ public class Player {
   private String email;
   private String password;
   private Integer rankScore;
+
+  @OneToMany
+  private List<Game> gameList;
 
   public Player() {
   }
@@ -63,5 +68,13 @@ public class Player {
 
   public void setRankScore(Integer rankScore) {
     this.rankScore = rankScore;
+  }
+
+  public List<Game> getGameList() {
+    return gameList;
+  }
+
+  public void setGameList(List<Game> gameList) {
+    this.gameList = gameList;
   }
 }

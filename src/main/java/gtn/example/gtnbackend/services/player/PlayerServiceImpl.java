@@ -1,4 +1,4 @@
-package gtn.example.gtnbackend.services;
+package gtn.example.gtnbackend.services.player;
 
 import gtn.example.gtnbackend.domains.Player;
 import gtn.example.gtnbackend.domains.dtos.SignInRequestDTO;
@@ -6,7 +6,6 @@ import gtn.example.gtnbackend.domains.dtos.SignInResponseDTO;
 import gtn.example.gtnbackend.domains.dtos.SignUpRequestDTO;
 import gtn.example.gtnbackend.domains.dtos.SignUpResponseDTO;
 import gtn.example.gtnbackend.repositories.PlayerRepository;
-import gtn.example.gtnbackend.security.util.JwtUtil;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

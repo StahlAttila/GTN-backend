@@ -1,4 +1,4 @@
-package gtn.example.gtnbackend.services;
+package gtn.example.gtnbackend.services.player;
 
 import gtn.example.gtnbackend.domains.Player;
 import gtn.example.gtnbackend.domains.dtos.SignInRequestDTO;
