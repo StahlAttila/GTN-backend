@@ -1,26 +1,19 @@
 package gtn.example.gtnbackend.domains.dtos;
 
-public class SignUpRequestDTO {
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
-  private String username;
+public class SignUpRequestDTO extends RequestDTO{
+
   private String email;
-  private String password;
 
   public SignUpRequestDTO() {
   }
 
-  public SignUpRequestDTO(String username, String email, String password) {
-    this.username = username;
+  public SignUpRequestDTO(String username, String password, String email) {
+    super(username, password);
     this.email = email;
-    this.password = password;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
   }
 
   public String getEmail() {
@@ -31,11 +24,17 @@ public class SignUpRequestDTO {
     this.email = email;
   }
 
-  public String getPassword() {
-    return password;
-  }
+  /*public List<String> getNullFields() {
+    List<String> nullFields = new ArrayList<>();
+    for (Field f : getClass().getDeclaredFields()) {
+      try {
+        if (f.get(this) == null) {
+          nullFields.add(f.getName());
+        }
+      } catch (IllegalAccessException ignored) {
+      }
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    return nullFields;
+  }*/
 }

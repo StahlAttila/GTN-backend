@@ -13,4 +13,5 @@ public interface GameService {
   List<Game> gameHistory(Player player);
 
   Game checkGuess(GuessDTO guessDTO);
+
 }

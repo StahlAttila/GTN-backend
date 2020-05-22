@@ -98,7 +98,7 @@ public class GameServiceImpl implements GameService {
   }
 
   private Integer calculateGameScore(Game game) {
-    if(game.getLives() == 0) {
+    if (game.getLives() == 0) {
       Player player = game.getPlayer();
       switch (game.getDifficulty()) {
         case EASY:
