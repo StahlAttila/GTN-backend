@@ -2,6 +2,8 @@ package gtn.example.gtnbackend.controllers;
 
 import gtn.example.gtnbackend.domains.GameDifficulty;
 import gtn.example.gtnbackend.domains.dtos.LeaderBoardDTO;
+import gtn.example.gtnbackend.domains.dtos.RanksResponseDTO;
+import gtn.example.gtnbackend.services.leaderboard.LeaderBoardService;
 import gtn.example.gtnbackend.services.player.PlayerService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class LeaderBoardController {
 
   private PlayerService playerService;
+  private LeaderBoardService leaderBoardService;
 
   @Autowired
-  public LeaderBoardController(PlayerService playerService) {
+  public LeaderBoardController(PlayerService playerService, LeaderBoardService leaderBoardService) {
     this.playerService = playerService;
+    this.leaderBoardService = leaderBoardService;
   }
 
   @GetMapping("/api/leaderboard/{difficulty}")
@@ -27,5 +31,12 @@ public class LeaderBoardController {
     List<LeaderBoardDTO> playerList = playerService.getRankedLeaderBoard(gamedifficulty);
 
     return new ResponseEntity<>(playerList, HttpStatus.OK);
+  }
+
+  @GetMapping("/api/ranks/{username}")
+  public ResponseEntity<?> playerRanks(@PathVariable String username) {
+    RanksResponseDTO ranksDTO = leaderBoardService.getPlayerRanks(username);
+
+    return new ResponseEntity<>(ranksDTO, HttpStatus.OK);
   }
 }

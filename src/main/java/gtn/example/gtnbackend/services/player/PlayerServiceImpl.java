@@ -141,7 +141,8 @@ public class PlayerServiceImpl implements PlayerService {
     return passwordEncoder().matches(dto.getPassword(), player.getPassword());
   }
 
-  private Boolean doesItHaveEnoughGames(GameDifficulty gameDifficulty, Player player) {
+  @Override
+  public Boolean doesItHaveEnoughGames(GameDifficulty gameDifficulty, Player player) {
     long numberOFGames = player.getGameList().stream()
         .filter(g -> g.getGameType().equals(GameType.RANKED) && g.getDifficulty()
             .equals(gameDifficulty))

@@ -27,4 +27,6 @@ public interface PlayerService {
   void updatePlayer(Player player);
 
   List<LeaderBoardDTO> getRankedLeaderBoard(GameDifficulty gameDifficulty);
+
+  Boolean doesItHaveEnoughGames(GameDifficulty difficulty, Player player);
 }
