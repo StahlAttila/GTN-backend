@@ -21,6 +21,7 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
   public RanksResponseDTO getPlayerRanks(String username) {
     Player player = playerService.findByName(username);
     RanksResponseDTO responseDTO = new RanksResponseDTO();
+    responseDTO.setId(player.getId());
     if (playerService.doesItHaveEnoughGames(GameDifficulty.EASY, player)) {
       responseDTO.setRankedEasy(player.getRankedEasy().toString());
     }

@@ -2,6 +2,7 @@ package gtn.example.gtnbackend.domains.dtos;
 
 public class LeaderBoardDTO {
 
+  private Long id;
   private String name;
   private Integer rankedEasy;
   private Integer rankedMedium;
@@ -10,12 +11,21 @@ public class LeaderBoardDTO {
   public LeaderBoardDTO() {
   }
 
-  public LeaderBoardDTO(String name, Integer rankedEasy, Integer rankedMedium,
+  public LeaderBoardDTO(Long id, String name, Integer rankedEasy, Integer rankedMedium,
       Integer rankedHard) {
+    this.id = id;
     this.name = name;
     this.rankedEasy = rankedEasy;
     this.rankedMedium = rankedMedium;
     this.rankedHard = rankedHard;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {
